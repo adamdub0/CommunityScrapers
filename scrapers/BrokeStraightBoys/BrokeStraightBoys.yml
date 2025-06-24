@@ -1,0 +1,70 @@
+name: Broke Straight Boys
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - brokestraightboys.com/play/
+      - www.brokestraightboys.com/play/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - brokestraightboys.com/model/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: /html/head/title
+        postProcess:
+          - replace:
+                - regex: \s|.*
+                  with: ""
+      Performers:
+        Name: //div[@class="vid-models"]/a
+        URL: //div[@class="vid-models"]/a/@href
+      Details:
+        selector: //div[@class="vid-dtls"]/p
+      Image:
+        selector: //div[@class="player-main"]/img/@src
+      Studio:
+        Name:
+          fixed: Broke Straight Boys
+
+  performerScraper:
+    performer:
+      Name: 
+        selector: //div[@class="model-lft"]/h1
+        postProcess:
+          - replace:
+                - regex: \s-.*
+                  with: ""
+      Gender:
+        fixed: Male
+      Weight:
+        selector: //div[@class="model-lft"]/ul/li/strong[contains(text(),"Weight:")]/following-sibling::text()
+        postProcess:
+          - replace:
+                - regex: (?:.*\(\s*(\d+)\s*kg\))
+                  with: "$1"
+      Height:
+        selector: //div[@clss="model-lft"]/ul/li/strong[contains(text(),"Height:")]/following-sibling::text()
+        postProcess:
+          - replace:
+                - regex: (?:.*\(\s*(\d+)\s*cm\))
+                  with: "$1"
+      PenisLength:
+        selector: //div[@class="model-lft"]/ul/li/strong[contains(text(),"Cock:")]/following-sibling::text()
+        postProcess:
+          - replace:
+                - regex: (?:.*\(\s*(\d+)\s*cm\))
+                  with: "$1"
+      Details:  
+        selector: /html/head/meta[@class="description"]/@content
+      FakeTits:
+        fixed: Natural
+      Image: //div[@class="model-lft"]/span/img/@src
+
+driver:
+  useCDP: false
